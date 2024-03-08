@@ -1,0 +1,32 @@
+# URL of the tar.gz file
+tar_url = "https://ml-inat-competition-datasets.s3.amazonaws.com/2021/train_mini.tar.gz"
+
+# Local path to download and extract the tar.gz file
+local_tar_path = "inat-dataset"
+
+print(f"Downloading {tar_url}...")
+# Download the tar.gz file
+wget.download(tar_url, local_tar_path)
+print("\nDownload complete.")
+
+# Extract the contents of the tar.gz file
+extracted_path = '/tmp/val_data'
+print(f"Extracting {local_tar_path} to {extracted_path}...")
+with tarfile.open(local_tar_path, 'r:gz') as tar:
+    tar.extractall(extracted_path)
+print("Extraction complete.")
+
+val_directory = 'inat-dataset/train_mini'
+
+print("listing folders")
+# List all folders in the 'val' directory
+folders = [f for f in os.listdir(val_directory) if os.path.isdir(os.path.join(val_directory, f))]
+print("filtering folders")
+# Filter folders that don't contain 'Plant' in their names
+folders_to_delete = [folder for folder in folders if 'Plant' not in folder]
+print("delete started")
+# Delete the folders
+for folder in folders_to_delete:
+    folder_path = os.path.join(val_directory, folder)
+    shutil.rmtree(folder_path)
+    print(f"Deleted folder: {folder_path}")

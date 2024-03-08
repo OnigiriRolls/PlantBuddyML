@@ -1,0 +1,18 @@
+gcloud config list --format 'value(core.project)'
+PROJECT_ID='galvanic-idiom-415016'
+REPO_NAME='plants-app'
+
+gcloud artifacts repositories create $REPO_NAME --repository-format=docker \
+--location=europe-west1 --description="Docker repository"
+
+IMAGE_URI=europe-west1-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/plant_image1:latest
+
+
+gcloud auth configure-docker \
+    europe-west1-docker.pkg.dev
+
+docker build ./ -t $IMAGE_URI
+
+
+docker push $IMAGE_URI
+
