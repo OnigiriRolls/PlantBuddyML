@@ -1,0 +1,19 @@
+gcloud config list --format 'value(core.project)'
+PROJECT_ID='unified-firefly-418214'
+REPO_NAME='plants-app'
+
+gcloud artifacts repositories create $REPO_NAME --repository-format=docker \
+--location=europe-west1 --description="Docker repository"
+
+IMAGE_URI=europe-west1-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/plant_em_image:latest
+
+
+gcloud auth configure-docker \
+    europe-west1-docker.pkg.dev
+
+docker build ./ -t $IMAGE_URI
+
+
+docker push $IMAGE_URI
+
+gsutil -m cp -r "gs://plant_buddy/oxford_dataset/test_set" "gs://plant_buddy/oxford_dataset/training_set" "gs://plant_buddy/oxford_dataset/validation_set" .

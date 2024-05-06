@@ -2,18 +2,17 @@ import wget
 import tarfile
 import os
 
-# URL of the tar.gz file
+
 tar_url = "https://ml-inat-competition-datasets.s3.amazonaws.com/2021/val.json.tar.gz"
 
-# Local path to download and extract the tar.gz file
+
 local_tar_path = "/inat-dataset/val.tar.gz"
 
 print(f"Downloading {tar_url}...")
-# Download the tar.gz file
+
 wget.download(tar_url, local_tar_path)
 print("\nDownload complete.")
 
-# Extract the contents of the tar.gz file
 extracted_path = '/tmp/val_data'
 print(f"Extracting {local_tar_path} to {extracted_path}...")
 with tarfile.open(local_tar_path, 'r:gz') as tar:
@@ -24,18 +23,15 @@ print("Extraction complete.")
 import tensorflow as tf
 import tensorflow_datasets as tfds
 
-# Instantiate the INaturalist2021 dataset builder
 #inaturalist_builder = tfds.builder("i_naturalist2021")
 
-# Download and prepare the dataset
+
 #inaturalist_builder.download_and_prepare()
 
-# Access the dataset info
 #dataset_info = inaturalist_builder.info
 print("Dataset Info:")
 print(dataset_info)
 
-# Create TensorFlow datasets for train, validation, and test splits
 mini_train_dataset = tfds.load(name="i_naturalist2021", split="mini-train")
 val_dataset = tfds.load(name="i_naturalist2021", split="val")
 test_dataset = tfds.load(name="i_naturalist2021", split="test")
@@ -43,8 +39,6 @@ test_dataset = tfds.load(name="i_naturalist2021", split="test")
 plant_mini_train_dataset = mini_train_dataset.filter(lambda x: x["label"] == 8)
 
 
-# Use tf.data.experimental.cardinality to get the size of the dataset
 plant_mini_dataset_size = tf.data.experimental.cardinality(plant_mini_train_dataset).numpy()
 
-# Print the size of the plant mini dataset
 print("Plant Mini Dataset Size:", plant_mini_dataset_size)
